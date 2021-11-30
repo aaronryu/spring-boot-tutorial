@@ -1,5 +1,5 @@
 package com.example.catphoto.application.dto
 
-data class CatPhotoFavoriteSaveDto (
+data class CatPhotoFavoriteAddRequest (
     val ids: List<String>,
 )

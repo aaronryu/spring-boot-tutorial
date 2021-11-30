@@ -108,7 +108,7 @@
             return
         }
         HttpClient.get(
-            `/catnena?number=${number}`,
+            `/cat/generate/?number=${number}`,
             (response) => {
                 $('.images').empty()
                 for (const eachResponse of response) {
@@ -142,7 +142,7 @@
             return
         }
         HttpClient.post(
-            `/favorite/save`,
+            `/cat/favorite`,
             { ids: toBeAddedList },
             (response) => {
                 alert("Successfully saved")
@@ -153,7 +153,7 @@
 
     function retrieveFavorite() {
         HttpClient.get(
-            `/favorite/retrieve`,
+            `/cat/favorite`,
             (response) => {
                 $('.favorite-images').empty()
                 for (const eachResponse of response) {
@@ -187,7 +187,7 @@
             return
         }
         HttpClient.delete(
-            `/favorite/delete`,
+            `/cat/favorite`,
             { ids: toBeDeleted },
             (response) => {
                 alert("Successfully deleted")

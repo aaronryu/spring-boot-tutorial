@@ -1,5 +1,5 @@
 package com.example.catphoto.application.dto
 
-data class CatPhotoFavoriteDeleteDto (
+data class CatPhotoFavoriteDeleteRequest (
     val ids: List<Int>,
 )
