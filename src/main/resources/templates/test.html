@@ -6,29 +6,53 @@
 </head>
 <body>
     <h1>Hello. It's [[${name}]]'s Cat Photo</h1>
-    <p>How many photos?: </p>
-    <label><input type="number" class="how-many" onkeyup="valid(this)"/></label>
-    <button onclick="active()">Get Photos(Refresh)</button>
-    <div class="separator"></div>
-    <div class="selected">- Selected: <b class="selected-ids">[]</b></div>
-    <button onclick="save()">Save above selected ids</button>
-    <div class="separator"></div>
-    <div class="images">
+    <div class="align">
+        <div class="column">
+            <h2>Cat Photo Generator</h2>
+            <div class="separator"></div>
+            <p>How many photos?: </p>
+            <label><input type="number" class="how-many" onkeyup="valid(this)"/></label>
+            <button onclick="active()">Get Photos(Refresh)</button>
 
-    </div>
-    <div class="separator">====================</div>
-    <div class="will-be-deleted">- Selected: <b class="delete-ids">[]</b></div>
-    <button onclick="deletor()">Delete selected ids from favorite</button>
-    <div class="favorite-images">
-
+            <div class="separator"></div>
+            <div class="selected">- Selected: <b class="selected-ids">[]</b></div>
+            <button onclick="save()">Save above selected ids</button>
+            <div class="separator"></div>
+            <div class="images">
+            </div>
+        </div>
+        <div class="column">
+            <h2>My Favorite List</h2>
+            <div class="separator"></div>
+            <div class="will-be-deleted">- Selected: <b class="delete-ids">[]</b></div>
+            <button onclick="deletor()">Delete selected ids from favorite</button>
+            <div class="separator"></div>
+            <div class="favorite-images">
+            </div>
+        </div>
     </div>
 </body>
 </html>
 <style>
+    .align {
+        display: flex;
+    }
+
+    .column {
+        min-width: 380px;
+        padding: 20px;
+        flex: 50%;
+    }
+
     .cat-image {
         width: 300px;
         height: 150px;
         object-fit: cover;
+    }
+
+    .separator {
+        border-top: 1px solid #bbb;
+        margin: 8px 0;
     }
 </style>
 <link th:href="@{/bootstrap.min.css}" rel="stylesheet" />
