@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cat Photo</title>
+</head>
+<body>
+    <h1>Hello. It's [[${name}]]'s Cat Photo</h1>
+    <p>How many photos?: </p>
+    <label><input type="number" class="how-many" onkeyup="valid(this)"/></label>
+    <button onclick="active()">Get Photos(Refresh)</button>
+    <div class="separator"></div>
+    <div class="selected">- Selected: <b class="selected-ids">[]</b></div>
+    <button onclick="save()">Save above selected ids</button>
+    <div class="separator"></div>
+    <div class="images">
+
+    </div>
+    <div class="separator">====================</div>
+    <div class="will-be-deleted">- Selected: <b class="delete-ids">[]</b></div>
+    <button onclick="deletor()">Delete selected ids from favorite</button>
+    <div class="favorite-images">
+
+    </div>
+</body>
+</html>
+<style>
+    .cat-image {
+        width: 300px;
+        height: 150px;
+        object-fit: cover;
+    }
+</style>
+<link th:href="@{/bootstrap.min.css}" rel="stylesheet" />
+<script th:src="@{/jquery.min.js}"></script>
+<script type="application/javascript">
+    function valid(e) {
+        $('.how-many').val(e.value.match(/\d+/g))
+    }
+
+    function active() {
+        const input = $('.how-many').val()
+        if (!input) {
+            alert('Please insert any number on input')
+            return
+        }
+        console.log(input)
+        call(input)
+    }
+
+    let basket = []
+    function call(number) {
+        $.get(`/catnena?number=${number}`)
+            .done((response) => {
+                $('.images').empty()
+                // console.log(response)
+                for (const eachResponse of response) {
+                    console.log(eachResponse + ` ${eachResponse.id} ${eachResponse.url}`)
+                    $('.images').append(
+                        $(`
+                        <div>
+                            <img class="cat-image" id='${eachResponse.id}' src='${eachResponse.url}'>
+                            <input type="checkbox" onclick="setBasket($(this).siblings()[0].id)">
+                        </div>
+                        `)
+                    )
+                }
+            })
+            .fail((response) => {
+                const status = response.status
+                if (/^(4\d*)/.test(status)) {
+                    alert("Auth error")
+                } else if (/^(5\d*)/.test(status)) {
+                    alert("Error, please contact us")
+                } else {
+                    alert("Error, please contact us")
+                }
+            })
+    }
+
+    function setBasket(selectedId) {
+        if (basket.includes(selectedId)) {
+            basket = basket.filter(each => each !== selectedId)
+        } else {
+            basket.push(selectedId)
+        }
+        $('.selected-ids').empty()
+        $('.selected-ids').append(`[ ${basket.join(', ')} ]`)
+    }
+
+    function save() {
+        if (basket.length <= 0) {
+            alert('Please select any cats!')
+            return
+        }
+        $.ajax({
+            url: `/favorite/save`,
+            type: 'POST',
+            data: JSON.stringify({ ids: basket }),
+            contentType: 'application/json; charset=UTF-8',
+            dataType: 'json',
+        }).done((response) => {
+            alert("Successfully saved")
+            retrieve()
+        })
+            .fail((response) => {
+                const status = response.status
+                if (/^(4\d*)/.test(status)) {
+                    alert("Auth error")
+                } else if (/^(5\d*)/.test(status)) {
+                    alert("Error, please contact us")
+                } else {
+                    alert("Error, please contact us")
+                }
+            })
+    }
+
+    function retrieve() {
+        $.get(`/favorite/retrieve`)
+            .done((response) => {
+                $('.favorite-images').empty()
+                // console.log(response)
+                for (const eachResponse of response) {
+                    console.log(eachResponse + ` ${eachResponse.id} ${eachResponse.image.id} ${eachResponse.image.url}`)
+                    $('.favorite-images').append(
+                        $(`
+                        <div>
+                            <img class="cat-image" id='${eachResponse.id}' src='${eachResponse.image.url}'>
+                            <input type="checkbox" onclick="setDeletee($(this).siblings()[0].id)">
+                        </div>
+                        `)
+                    )
+                }
+            })
+            .fail((response) => {
+                const status = response.status
+                if (/^(4\d*)/.test(status)) {
+                    alert("Auth error")
+                } else if (/^(5\d*)/.test(status)) {
+                    alert("Error, please contact us")
+                } else {
+                    alert("Error, please contact us")
+                }
+            })
+    }
+
+    function setDeletee(selectedId) {
+        if (deletee.includes(selectedId)) {
+            deletee = deletee.filter(each => each !== selectedId)
+        } else {
+            deletee.push(selectedId)
+        }
+        $('.delete-ids').empty()
+        $('.delete-ids').append(`[ ${deletee.join(', ')} ]`)
+    }
+
+    let deletee = []
+    function deletor() {
+        if (deletee.length <= 0) {
+            alert('Please select any cats to delete!')
+            return
+        }
+        $.ajax({
+            url: `/favorite/delete`,
+            type: 'DELETE',
+            data: JSON.stringify({ ids: deletee }),
+            contentType: 'application/json; charset=UTF-8',
+            dataType: 'json',
+        }).done((response) => {
+            alert("Successfully deleted")
+            retrieve()
+        })
+            .fail((response) => {
+                const status = response.status
+                if (/^(4\d*)/.test(status)) {
+                    alert("Auth error")
+                } else if (/^(5\d*)/.test(status)) {
+                    alert("Error, please contact us")
+                } else {
+                    alert("Error, please contact us")
+                }
+            })
+    }
+
+    $(document).ready(() => {
+        retrieve()
+    })
+</script>
