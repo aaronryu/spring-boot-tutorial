@@ -116,7 +116,7 @@
                         $(`
                         <div>
                             <img class="cat-image" id='${eachResponse.id}' src='${eachResponse.url}'>
-                            <input type="checkbox" onclick="setToBeAddedList($(this).siblings()[0].id)">
+                            <input type="checkbox" class="to-be-added-check" onclick="setToBeAdded($(this).siblings()[0].id)">
                         </div>
                         `)
                     )
@@ -125,28 +125,35 @@
         )
     }
 
-    let toBeAddedList = []
-    function setToBeAddedList(selectedId) {
-        if (toBeAddedList.includes(selectedId)) {
-            toBeAddedList = toBeAddedList.filter(each => each !== selectedId)
+    let toBeAdded = []
+    function setToBeAdded(selectedId) {
+        if (toBeAdded.includes(selectedId)) {
+            toBeAdded = toBeAdded.filter(each => each !== selectedId)
         } else {
-            toBeAddedList.push(selectedId)
+            toBeAdded.push(selectedId)
         }
         $('.selected-ids').empty()
-        $('.selected-ids').append(`[ ${toBeAddedList.join(', ')} ]`)
+        $('.selected-ids').append(`[ ${toBeAdded.join(', ')} ]`)
+    }
+    function clearToBeAdded() {
+        toBeAdded = []
+        $('.selected-ids').empty()
+        $('.selected-ids').append(`[ ${toBeAdded.join(', ')} ]`)
+        $('input:checkbox.to-be-added-check').prop('checked', false)
     }
 
     function addToFavorite() {
-        if (toBeAddedList.length <= 0) {
+        if (toBeAdded.length <= 0) {
             alert('Please select any cats!')
             return
         }
         HttpClient.post(
             `/cat/favorite`,
-            { ids: toBeAddedList },
+            { ids: toBeAdded },
             (response) => {
                 alert("Successfully saved")
                 retrieveFavorite()
+                clearToBeAdded()
             }
         )
     }
@@ -161,7 +168,7 @@
                         $(`
                         <div>
                             <img class="cat-image" id='${eachResponse.id}' src='${eachResponse.image.url}'>
-                            <input type="checkbox" onclick="setToBeDeleted($(this).siblings()[0].id)">
+                            <input type="checkbox" class="to-be-deleted-check" onclick="setToBeDeleted($(this).siblings()[0].id)">
                         </div>
                         `)
                     )
@@ -180,6 +187,12 @@
         $('.delete-ids').empty()
         $('.delete-ids').append(`[ ${toBeDeleted.join(', ')} ]`)
     }
+    function clearToBeDeleted() {
+        toBeDeleted = []
+        $('.delete-ids').empty()
+        $('.delete-ids').append(`[ ${toBeDeleted.join(', ')} ]`)
+        $('input:checkbox.to-be-deleted-check').prop('checked', false)
+    }
 
     function deleteFromFavorite() {
         if (toBeDeleted.length <= 0) {
@@ -192,6 +205,7 @@
             (response) => {
                 alert("Successfully deleted")
                 retrieveFavorite()
+                clearToBeDeleted()
             }
         )
     }
