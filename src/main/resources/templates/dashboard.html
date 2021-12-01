@@ -10,13 +10,12 @@
         <div class="column">
             <h2>Cat Photo Generator</h2>
             <div class="separator"></div>
+            <div class="selected">- Selected: <b class="selected-ids">[]</b></div>
+            <button style="background-color: #d6f5d6" onclick="addToFavorite()">Save above selected ids</button>
+            <div class="separator"></div>
             <p>How many photos?: </p>
             <label><input type="number" class="cat-generate-number" onkeyup="checkValidNumber(this)"/></label>
-            <button onclick="generateCats()">Get Photos(Refresh)</button>
-
-            <div class="separator"></div>
-            <div class="selected">- Selected: <b class="selected-ids">[]</b></div>
-            <button onclick="addToFavorite()">Save above selected ids</button>
+            <button style="background-color: #cce6ff" onclick="generateCats()">Get Photos(Refresh)</button>
             <div class="separator"></div>
             <div class="images">
             </div>
@@ -25,7 +24,7 @@
             <h2>My Favorite List</h2>
             <div class="separator"></div>
             <div class="will-be-deleted">- Selected: <b class="delete-ids">[]</b></div>
-            <button onclick="deleteFromFavorite()">Delete selected ids from favorite</button>
+            <button style="background-color: #ffcccc" onclick="deleteFromFavorite()">Delete selected ids from favorite</button>
             <div class="separator"></div>
             <div class="favorite-images">
             </div>

@@ -3,7 +3,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class CatPhotoFavoriteSaveRequestDto(
+data class CatPhotoFavoriteAddRequestDto(
     @SerialName("image_id")
     val imageId: String,
     @SerialName("sub_id")

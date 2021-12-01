@@ -1,11 +1,10 @@
 package com.example.catphoto.controller
 
 import com.example.catphoto.application.CatPhotoApiApplication
-import com.example.catphoto.application.dto.CatPhotoDto
+import com.example.catphoto.application.dto.CatPhotoGenerateResponse
 import com.example.catphoto.application.dto.CatPhotoFavoriteDeleteRequest
 import com.example.catphoto.application.dto.CatPhotoFavoriteResponse
 import com.example.catphoto.application.dto.CatPhotoFavoriteAddRequest
-import lombok.RequiredArgsConstructor
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
@@ -23,7 +22,7 @@ class CatPhotoController(
 
     @ResponseBody
     @GetMapping("/cat/generate/")
-    fun generateCat(@RequestParam number: Int): List<CatPhotoDto> {
+    fun generateCat(@RequestParam number: Int): List<CatPhotoGenerateResponse> {
         return application.generate(number)
     }
 

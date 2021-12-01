@@ -1,4 +1,4 @@
-package com.example.catphoto.application
+package com.example.catphoto.helper
 
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json

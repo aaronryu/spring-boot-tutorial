@@ -1,9 +1,10 @@
 package com.example.catphoto.application
 
-import com.example.catphoto.application.dto.CatPhotoDto
+import com.example.catphoto.application.dto.CatPhotoGenerateResponse
 import com.example.catphoto.application.dto.CatPhotoFavoriteResponse
-import com.example.catphoto.application.dto.CatPhotoFavoriteRetrieveResponseDto
-import com.example.catphoto.application.dto.CatPhotoFavoriteSaveRequestDto
+import com.example.catphoto.application.dto.CatPhotoFavoriteRetrieveResponse
+import com.example.catphoto.application.dto.CatPhotoFavoriteAddRequestDto
+import com.example.catphoto.helper.HttpClientHelper
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.ResponseEntity
@@ -22,13 +23,13 @@ class CatPhotoApiApplication {
         const val SINGLE_FAVOURITE_ID = "only-one-favorite"
     }
 
-    fun generate(number: Int): List<CatPhotoDto> {
+    fun generate(number: Int): List<CatPhotoGenerateResponse> {
         if (number > MAX_NUMBER) {
             throw RuntimeException("Max requestable number is ${MAX_NUMBER}, requested: $number")
         }
         val pagination: MutableList<Int> = generatePaginationHelperList(number, PAGINATION_CRITERIA)
         val response = pagination.mapIndexed { index, value ->
-            return HttpClientHelper(apiKey).get<Array<CatPhotoDto>, String>(
+            return HttpClientHelper(apiKey).get<Array<CatPhotoGenerateResponse>, String>(
                 "https://api.thecatapi.com/v1/images/search?size=small&limit=${value}&page=${index}", ""
             ).body?.toList()
                 ?: throw RuntimeException("No result from API server")
@@ -43,11 +44,11 @@ class CatPhotoApiApplication {
             ?: throw RuntimeException("No result from API server")
 
     fun addToFavorite(ids: List<String>) {
-        val requests: List<CatPhotoFavoriteSaveRequestDto> = ids.map {
-            CatPhotoFavoriteSaveRequestDto(imageId = it, subId = SINGLE_FAVOURITE_ID)
+        val requests: List<CatPhotoFavoriteAddRequestDto> = ids.map {
+            CatPhotoFavoriteAddRequestDto(imageId = it, subId = SINGLE_FAVOURITE_ID)
         }
-        for (eachRequest: CatPhotoFavoriteSaveRequestDto in requests) {
-            val respEntity: ResponseEntity<CatPhotoFavoriteRetrieveResponseDto> = try {
+        for (eachRequest: CatPhotoFavoriteAddRequestDto in requests) {
+            val respEntity: ResponseEntity<CatPhotoFavoriteRetrieveResponse> = try {
                 HttpClientHelper(apiKey).post(
                     "https://api.thecatapi.com/v1/favourites", eachRequest
                 )

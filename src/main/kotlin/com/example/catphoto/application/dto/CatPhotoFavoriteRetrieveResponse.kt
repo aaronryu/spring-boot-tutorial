@@ -1,6 +1,6 @@
 package com.example.catphoto.application.dto
 
-data class CatPhotoFavoriteRetrieveResponseDto (
+data class CatPhotoFavoriteRetrieveResponse (
     val id: String,
     val message: String
 )
