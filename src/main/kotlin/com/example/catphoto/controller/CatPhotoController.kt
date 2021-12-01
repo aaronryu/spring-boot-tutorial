@@ -21,7 +21,7 @@ class CatPhotoController(
     }
 
     @ResponseBody
-    @GetMapping("/cat/generate/")
+    @GetMapping("/cat/generate")
     fun generateCat(@RequestParam number: Int): List<CatPhotoGenerateResponse> {
         return application.generate(number)
     }
